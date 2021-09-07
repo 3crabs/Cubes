@@ -50,13 +50,12 @@ func display(prefix string, cubes []Cube) {
 }
 
 func isWin(cubes []Cube) bool {
-	win := true
 	for i := 0; i < len(cubes)-1; i++ {
 		if cubes[i].State != cubes[i+1].State {
-			win = false
+			return false
 		}
 	}
-	return win
+	return true
 }
 
 func findPath() ([]int, error) {
@@ -68,9 +67,11 @@ func findPath() ([]int, error) {
 			return step.path, nil
 		}
 		for i := 0; i < len(step.cubes); i++ {
-			tmp := make([]Cube, len(step.cubes))
-			copy(tmp, step.cubes)
-			steps = append(steps, Step{cubes: tmp, nextCubeNumber: i, path: append(step.path, i)})
+			tmpCubes := make([]Cube, len(step.cubes))
+			copy(tmpCubes, step.cubes)
+			tmpPath := make([]int, len(step.path))
+			copy(tmpPath, step.path)
+			steps = append(steps, Step{cubes: tmpCubes, nextCubeNumber: i, path: append(tmpPath, i)})
 		}
 	}
 	return nil, errors.New("path not found")
@@ -79,16 +80,21 @@ func findPath() ([]int, error) {
 func main() {
 	n := 5
 	cubes := make([]Cube, n)
-	cubes[1].RotateDeep(cubes)
 	cubes[1].Add(2)
+	cubes[1].Add(4)
+	cubes[1].RotateDeep(cubes)
+	cubes[2].RotateDeep(cubes)
 
 	for i := 0; i < n; i++ {
 		tmp := make([]Cube, len(cubes))
 		copy(tmp, cubes)
 		steps = append(steps, Step{cubes: tmp, nextCubeNumber: i, path: []int{i}})
 	}
-	path, _ := findPath()
-	fmt.Println(path)
+	path, err := findPath()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("path", path)
 	display("start ", cubes)
 	for _, p := range path {
 		cubes[p].RotateDeep(cubes)
