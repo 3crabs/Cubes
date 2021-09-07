@@ -20,12 +20,7 @@ func Find(cubes []models.Cube) ([]int, error) {
 
 //findPath поиск кратчайшего пути к выигрышной комбинации
 func findPath() ([]int, error) {
-	k := 0
-	for len(steps) > 0 {
-		k++
-		if k > 1000 {
-			break
-		}
+	for k := 0; len(steps) > 0 && k < 1000; k++ {
 		step := steps[0]
 		steps = steps[1:]
 		step.Cubes[step.NextCubeNumber].Rotate(step.Cubes)
