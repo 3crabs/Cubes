@@ -18,10 +18,7 @@ func (c *Cube) rotate() {
 
 //RotateDeep поворот кубика и связаных кубиков
 func (c *Cube) RotateDeep() {
-	c.State++
-	if c.State > 3 {
-		c.State = 0
-	}
+	c.rotate()
 	for _, link := range c.links {
 		link.rotate()
 	}
@@ -29,7 +26,7 @@ func (c *Cube) RotateDeep() {
 
 //Add добавление связи
 func (c *Cube) Add(other *Cube) {
-	c.links =append(c.links, other)
+	c.links = append(c.links, other)
 }
 
 func main() {
