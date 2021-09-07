@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-//steps список возможных комбинаций
+//steps список шагов алгоритма
 var steps []models.Step
 
 //Find поиск кратчайшего пути к выигрышной комбинации
@@ -18,7 +18,7 @@ func Find(cubes []models.Cube) ([]int, error) {
 	return findPath()
 }
 
-//findPath поиск кратчайшего пути к выигрышной комбинации
+//findPath поиск кратчайшего пути к выигрышной комбинации при заданом начальной очереди шагов
 func findPath() ([]int, error) {
 	for k := 0; len(steps) > 0 && k < 1000; k++ {
 		step := steps[0]
