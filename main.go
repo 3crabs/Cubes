@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 )
@@ -58,16 +59,13 @@ func isWin(cubes []Cube) bool {
 	return win
 }
 
-func findPath() {
+func findPath() ([]int, error) {
 	for len(steps) > 0 {
 		step := steps[0]
 		steps = steps[1:]
 		step.cubes[step.nextCubeNumber].RotateDeep(step.cubes)
-		display("("+strconv.Itoa(step.nextCubeNumber)+") -> ", step.cubes)
 		if isWin(step.cubes) {
-			display("end ", step.cubes)
-			fmt.Println("path:", step.path)
-			return
+			return step.path, nil
 		}
 		for i := 0; i < len(step.cubes); i++ {
 			tmp := make([]Cube, len(step.cubes))
@@ -75,6 +73,7 @@ func findPath() {
 			steps = append(steps, Step{cubes: tmp, nextCubeNumber: i, path: append(step.path, i)})
 		}
 	}
+	return nil, errors.New("path not found")
 }
 
 func main() {
@@ -88,6 +87,11 @@ func main() {
 		copy(tmp, cubes)
 		steps = append(steps, Step{cubes: tmp, nextCubeNumber: i, path: []int{i}})
 	}
+	path, _ := findPath()
+	fmt.Println(path)
 	display("start ", cubes)
-	findPath()
+	for _, p := range path {
+		cubes[p].RotateDeep(cubes)
+		display("("+strconv.Itoa(p)+") -> ", cubes)
+	}
 }
