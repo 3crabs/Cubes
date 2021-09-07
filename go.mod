@@ -1,3 +1,3 @@
-module cudes
+module cubes
 
 go 1.17
